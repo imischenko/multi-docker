@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t imischenko/react-test -f ./client Dockerfile.dev ./client
+
+script:
+  - docker run -CI=true imischenko/react-test npm test
+
+after_success:
+  - docker build -t imischenko/multi-client ./client
+  - docker build -t imischenko/multi-nginx ./nginx
+  - docker build -t imischenko/multi-server ./server
+  - docker build -t imischenko/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push imischenko/multi-client
+  - docker push imischenko/multi-nginx
+  - docker push imischenko/multi-server
+  - docker push imischenko/multi-worker
