@@ -19,6 +19,7 @@ after_success:
   - docker push imischenko/multi-server
   - docker push imischenko/multi-worker
 
+
 deploy:
   provider: elasticbeanstalk
   region: "us-east-2"
